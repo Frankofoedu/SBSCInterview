@@ -9,21 +9,22 @@ namespace SBSCInterview
     {
         static void Main(string[] args)
         {
-           Console.WriteLine(HyphenSeperatedNumber("1 - 2 - 2 - 4 - 5"));
+           Console.WriteLine(AbsoluteDiff(new List<int> {1,4,6, 9}, 3));
 
 
             Console.Read();
         }
+
         static bool HyphenSeperatedNumber(string inputString)
         {
-            
+
             if (string.IsNullOrWhiteSpace(inputString))
             {
                 return false;
             }
 
             //split string to integer array
-              var arr = inputString.Split('-').Select(int.Parse).ToList();
+            var arr = inputString.Split('-').Select(int.Parse).ToList();
 
             if (arr.Count <= 0)
                 return false;
@@ -45,6 +46,48 @@ namespace SBSCInterview
             return true;
         }
 
+
+        static int AbsoluteDiff(List<int> arr, int k)
+        {
+            var set = arr.ToHashSet();
+            var oldCount = arr.Count;
+
+            return LoopThrough(arr, set, oldCount, k);
+
+
+            static int LoopThrough(List<int> arr, HashSet<int> set, int oldCount, int k)
+            {
+                var listDiff = new List<int>();
+                for (int i = 0; i < arr.Count - 1; i++)
+                {
+                    var diff = Math.Abs(arr[i] - arr[i + 1]);
+
+                    if (!set.Contains(diff))
+                    {
+                        set.Add(diff);
+                        listDiff.Add(diff);
+                    }
+                }
+
+                if (set.Count != oldCount)
+                {
+                    oldCount = set.Count;
+                    return LoopThrough(listDiff, set, oldCount, k);
+                }
+                else
+                {
+                    //find kth element
+                    return set.OrderBy(x=> x).ElementAt(k);
+
+                }
+
+            }
+        }
+
+        
+
+
+
         static string StringOccurrence(string inputString)
         {
             //loop through string
@@ -58,10 +101,8 @@ namespace SBSCInterview
 
             var dictOccurence = new Dictionary<char, int>();
             var sb = new StringBuilder();
-            for (int i = 0; i < inputString.Length; i++)
+            foreach (var c in inputString)
             {
-                var c = inputString[i];
-
                 if (!dictOccurence.ContainsKey(c))
                 {
                     dictOccurence.Add(c, 1);
