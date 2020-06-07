@@ -76,8 +76,16 @@ namespace SBSCInterview
                 }
                 else
                 {
-                    //find kth element
-                    return set.OrderBy(x=> x).ElementAt(k);
+                    try
+                    {
+
+                        //find kth element
+                        return set.OrderBy(x => x).ElementAt(k);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        return -1;
+                    }
 
                 }
 
